@@ -10,9 +10,8 @@ import (
 func ConfigServer(db *sql.DB) {
 	router := fasthttprouter.New()
 
-
 	router.POST("/", func(ctx *fasthttp.RequestCtx) {
-		CheckAvailability(ctx, db)
+		//CheckAvailability(ctx, db)
 	})
 
 	fasthttp.ListenAndServe(":6061", fasthttp.CompressHandler(router.Handler))
