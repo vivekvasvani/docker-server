@@ -20,7 +20,7 @@ func main() {
 func getDB() {
 	var err error
 
-	db, err = sql.Open("mysql", "abhijit:Myntra@123@tcp(192.168.20.59:3306)/nazgul")
+	db, err = sql.Open("mysql", "root:hike@tcp(10.128.20.71:3306)/docker")
 	if err != nil {
 		fmt.Print(err.Error())
 		panic("Not able to Connect To DataBase")

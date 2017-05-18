@@ -1,0 +1,9 @@
+{
+    "mysql":{
+        "username" : "root",
+        "password" : "hike",
+        "ip" : "10.128.20.71",
+        "schemaName" : "docker"
+    }
+}
+
