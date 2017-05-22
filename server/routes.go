@@ -3,6 +3,8 @@ package server
 import (
 	"database/sql"
 
+	"fmt"
+
 	"github.com/buaazp/fasthttprouter"
 	"github.com/valyala/fasthttp"
 )
@@ -10,9 +12,10 @@ import (
 func ConfigServer(db *sql.DB) {
 	router := fasthttprouter.New()
 
-	router.POST("/", func(ctx *fasthttp.RequestCtx) {
-		//CheckAvailability(ctx, db)
+	router.POST("/startenvironment", func(ctx *fasthttp.RequestCtx) {
+		CheckAndStartEnvironment(ctx, db)
 	})
 
-	fasthttp.ListenAndServe(":6061", fasthttp.CompressHandler(router.Handler))
+	fmt.Println(fasthttp.ListenAndServe(":6061", fasthttp.CompressHandler(router.Handler)))
+
 }

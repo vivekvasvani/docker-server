@@ -1,25 +1,19 @@
 package utils
 
 import (
-	"database/sql"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net"
-	"net/http"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strconv"
-	"strings"
-	"time"
-	"bitbucket.org/myntra/nazgul-shadowfax/lib"
+
 	scp "github.com/bramvdbogaerde/go-scp"
 	"github.com/elgs/gostrgen"
 	"github.com/valyala/fasthttp"
 	"golang.org/x/crypto/ssh"
 )
-
 
 //Create SSH connection with server name
 func CreateConnection(server, username, pemFilePath string) *ssh.Client {
@@ -34,6 +28,22 @@ func CreateConnection(server, username, pemFilePath string) *ssh.Client {
 	config := &ssh.ClientConfig{
 		User: username,
 		Auth: []ssh.AuthMethod{ssh.PublicKeys(signer)},
+	}
+	conn, err := ssh.Dial("tcp", server+":22", config)
+	if err != nil {
+		log.Fatalf("dial failed 1 :%v", err)
+		conn, err = ssh.Dial("tcp", server+":22", config)
+		if err != nil {
+			log.Fatalf("dial failed 2 :%v", err)
+		}
+	}
+	return conn
+}
+
+//Create SSH connection with server name and without pem
+func CreateConnectionWithoutPem(server, username string) *ssh.Client {
+	config := &ssh.ClientConfig{
+		User: username,
 	}
 	conn, err := ssh.Dial("tcp", server+":22", config)
 	if err != nil {
@@ -69,15 +79,12 @@ func ExecuteCommand(conn *ssh.Client, command string) bool {
 }
 
 //To execute commands on local
-func ExecuteCommandOnLocal(command string) bool {
-	cmd := exec.Command(command)
-	err := cmd.Start()
-	cmd.Wait()
+func ExecuteCommandOnLocal(command string) {
+	out, err := exec.Command(command).Output()
 	if err != nil {
-		fmt.Println(err.Error())
-		return false
+		log.Fatal(err)
 	}
-	return true
+	fmt.Printf("%s", out)
 }
 
 //Return process id runing on a specific port on a remote machine
@@ -154,12 +161,12 @@ func CreateSCPClient(address, username, pemFilePath string) scp.Client {
 
 //Set Error Response
 func SetErrorResponse(ctx *fasthttp.RequestCtx, slaveCount int) {
-	var response Response
-	ctx.Response.Header.Add("Content-Type", "application/json")	
+	//var response Response
+	ctx.Response.Header.Add("Content-Type", "application/json")
 }
 
 //Set Success Response
 func SetSuccessResponse(ctx *fasthttp.RequestCtx, masterIp, masterRunId, outputLocation, jtl, console string, slaveCount int) {
-	var response Response
-	ctx.Response.Header.Add("Content-Type", "application/json")	
+	//var response Response
+	ctx.Response.Header.Add("Content-Type", "application/json")
 }

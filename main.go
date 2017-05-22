@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/vivekvasvani/docker-server/server"
+	utils "github.com/vivekvasvani/docker-server/utils"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -14,6 +15,8 @@ var db *sql.DB
 
 func main() {
 	getDB()
+	utils.ExecuteCommandOnLocal("pwd")
+	utils.ExecuteCommandOnLocal("sh remoteshell/messaging.sh")
 	server.ConfigServer(db)
 }
 
