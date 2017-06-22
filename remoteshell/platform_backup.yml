@@ -1,0 +1,27 @@
+version: 1
+servers:
+ prod:
+     - name : "Platform Server #1"
+       host : "192.168.0.145:22"
+       user : "vivekv" 
+commands:
+ clean :    
+    - cd /home/vivekv/env/platform-environment;sudo docker-compose down
+    - sudo docker stop $(docker ps -a -q) ; sudo docker rm $(docker ps -a -q)
+    - sudo docker images | grep "platform" | awk '{print $1}' | xargs docker rmi
+    - sudo rm -rf /mnt/log/api/*
+    - sudo docker volume ls -qf dangling=true | xargs -r docker volume rm
+    - sudo rm -rf env
+ create:
+     - "mkdir env"
+     - "sudo docker login maven.hike.in:5001 -ureader -pr3@d3R"          
+ clone:
+     - "cd env;sudo git clone git@github.com:hike/platform-environment.git"     
+ start:
+     - "sudo cp /home/vivekv/env/platform-environment/m2_settings.xml ~/.m2/settings.xml"
+     - "export IM_HOST_IP=192.168.0.190;export HOST_IP=192.168.0.145;cd /home/vivekv/env/platform-environment;sudo docker-compose up -d"
+ teardown:
+     - cd /home/vivekv/env/platform-environment;sudo docker-compose down 
+     - sudo rm -rf env    
+
+     
