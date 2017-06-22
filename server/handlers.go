@@ -19,7 +19,7 @@ import (
 
 var wg sync.WaitGroup
 
-const SLACK_TOKEN = "xoxp-2151902985-167537642311-189252965986-bbef2b7b92a16731b291eccf5cbb1384"
+const SLACK_TOKEN = ""
 
 func CheckAndStartInstance(ctx *fasthttp.RequestCtx, db *sql.DB) {
 	var request Request
